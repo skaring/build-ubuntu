@@ -1,0 +1,11 @@
+curl 
+- sudo apt install curl
+Claude Code 
+- (curl -fsSL https://claude.ai/install.sh | bash)
+- echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc 
+Bitwarden
+Ghostty
+Vivaldi
+Herdr
+git
+
