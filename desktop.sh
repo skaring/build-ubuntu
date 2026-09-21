@@ -51,5 +51,20 @@ else
     warn "ksnip is not installed; Super+Shift+S not bound (run ./install.sh ksnip first)."
 fi
 
+# No audible bell in terminals. Ptyxis (Ubuntu's stock terminal) has its own setting; skip if it is not installed.
+if gsettings list-schemas | grep -qx 'org.gnome.Ptyxis'; then
+    gsettings set org.gnome.Ptyxis audible-bell false
+fi
+# Ghostty: turn off the audio and system beep explicitly (title/attention cues stay, they are silent).
+ghostty_cfg=~/.config/ghostty/config.ghostty
+mkdir -p ~/.config/ghostty
+if ! grep -qxF '# >>> build-ubuntu: no audible bell >>>' "$ghostty_cfg" 2>/dev/null; then
+    cat >> "$ghostty_cfg" <<'GHOSTTY'
+# >>> build-ubuntu: no audible bell >>>
+bell-features = no-audio,no-system,attention,title
+# <<< build-ubuntu: no audible bell <<<
+GHOSTTY
+fi
+
 # Default browser (Vivaldi) is set by the `vivaldi` step in install.sh.
 echo "Desktop preferences applied."
