@@ -7,7 +7,7 @@ Unattended setup for a fresh Ubuntu 26.04 desktop. See `software.txt` for the so
 From a regular terminal (sudo needs a TTY), on a fresh machine:
 
 ```bash
-bash <(wget -qO- https://raw.githubusercontent.com/<you>/<repo>/main/install.sh)
+bash <(wget -qO- https://raw.githubusercontent.com/skaring/build-ubuntu/main/install.sh)
 ```
 
 Or from a checkout:
