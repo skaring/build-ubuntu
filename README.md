@@ -25,4 +25,5 @@ Bitwarden (its `.deb` does not self-update).
 - No snaps: everything is installed via apt, an apt-installed `.deb`, or the vendor's install script.
 - `install.sh` must stay a single self-contained file to work with the `wget` one-liner. If it is
   split up, switch the one-liner to `git clone` + run.
+- `TODO.md` lists the manual steps the script does not (or should not) do.
 - Keep secrets out of this repo; it is meant to be public.
