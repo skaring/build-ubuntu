@@ -4,7 +4,7 @@
 set -euo pipefail
 
 REPO="${REPO:-https://github.com/skaring/build-ubuntu.git}"
-DEST="${DEST:-$HOME/build-ubuntu}"
+DEST="${DEST:-$HOME/git/build-ubuntu}"
 
 [[ $EUID -ne 0 ]] || { echo "Run as your normal user, not root." >&2; exit 1; }
 
@@ -12,6 +12,7 @@ sudo -v
 sudo apt-get update
 sudo apt-get install -y git ca-certificates
 
+mkdir -p "$(dirname "$DEST")"
 if [[ -d $DEST/.git ]]; then
     git -C "$DEST" pull --ff-only
 else
