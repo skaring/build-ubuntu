@@ -4,6 +4,7 @@ Claude Code
 - (curl -fsSL https://claude.ai/install.sh | bash)
 - echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc 
 Bitwarden
+Obsidian
 Ghostty
 Vivaldi
 YubiKey support (yubikey-manager, fido2-tools, pcscd, scdaemon, Yubico Authenticator)

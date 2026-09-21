@@ -31,4 +31,4 @@ Tick them off as you go; add new ones as they come up.
 ## Undecided
 - [ ] Firefox stays as a backup browser (decided). It is a snap on Ubuntu; revisit only if you want
       it via Mozilla's apt repo instead (avoiding snaps is a stated preference).
-- [ ] Bitwarden `.deb` does not self-update: re-run `./install.sh bitwarden` to upgrade.
+- [ ] Bitwarden and Obsidian `.deb`s do not self-update: re-run `./install.sh bitwarden obsidian` to upgrade.

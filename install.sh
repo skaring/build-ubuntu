@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Unattended setup for a fresh Ubuntu 26.04 desktop. Idempotent: safe to re-run.
 # Software list: see software.txt in this repo. Usage: ./install.sh [step ...]
-# Steps: base claude vivaldi ghostty bitwarden yubikey herdr desktop  (default: all, in that order)
+# Steps: base claude vivaldi ghostty bitwarden obsidian yubikey herdr desktop  (default: all, in that order)
 set -euo pipefail
 
 log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
@@ -34,6 +34,25 @@ trap 'kill $! 2>/dev/null || true' EXIT
 
 export DEBIAN_FRONTEND=noninteractive
 APT=(sudo apt-get install -y)
+
+# install_deb <name> <url>...: download the first URL that works and install it through apt
+# (so dpkg tracks it and dependencies are resolved).
+install_deb() {
+    local name=$1 url tmp; shift
+    tmp="$(mktemp -d)"
+    for url in "$@"; do
+        echo "downloading $url"
+        if curl -fsSL --retry 2 "$url" -o "$tmp/$name.deb"; then
+            "${APT[@]}" "$tmp/$name.deb"
+            rm -rf "$tmp"
+            return 0
+        fi
+        echo "download failed, trying the next candidate" >&2
+    done
+    rm -rf "$tmp"
+    echo "error: no working download for $name" >&2
+    return 1
+}
 
 step_base() {
     log "Base packages"
@@ -93,11 +112,18 @@ step_bitwarden() {
     # Bitwarden ships no apt repo. The .deb doesn't self-update; re-run this step to upgrade.
     # (.deb rather than snap so browser-extension integration works outside the snap sandbox.)
     log "Bitwarden desktop (.deb from bitwarden.com)"
-    local tmp; tmp="$(mktemp -d)"
-    curl -fsSL 'https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb' \
-        -o "$tmp/bitwarden.deb"
-    "${APT[@]}" "$tmp/bitwarden.deb"
-    rm -rf "$tmp"
+    install_deb bitwarden 'https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb'
+}
+
+step_obsidian() {
+    # No apt repo either. GitHub's newest release is sometimes Android-only or has a broken asset,
+    # so try the newest few releases that have an amd64 .deb, newest first. Re-run to upgrade.
+    log "Obsidian (.deb from GitHub releases)"
+    local urls
+    mapfile -t urls < <(curl -fsSL 'https://api.github.com/repos/obsidianmd/obsidian-releases/releases?per_page=15' \
+        | grep -o '"browser_download_url": *"[^"]*_amd64\.deb"' | cut -d'"' -f4 | head -3)
+    [[ ${#urls[@]} -gt 0 ]] || { echo "error: could not find an Obsidian .deb release" >&2; return 1; }
+    install_deb obsidian "${urls[@]}"
 }
 
 step_yubikey() {
@@ -122,7 +148,7 @@ step_desktop() {
 }
 
 STEPS=("$@")
-[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base claude vivaldi ghostty bitwarden yubikey herdr desktop)
+[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base claude vivaldi ghostty bitwarden obsidian yubikey herdr desktop)
 
 for s in "${STEPS[@]}"; do
     declare -F "step_$s" >/dev/null || { echo "Unknown step: $s" >&2; exit 1; }
