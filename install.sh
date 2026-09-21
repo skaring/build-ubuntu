@@ -1,12 +1,29 @@
 #!/usr/bin/env bash
 # Unattended setup for a fresh Ubuntu 26.04 desktop. Idempotent: safe to re-run.
-# Software list: see ~/software.txt. Usage: ./install.sh [step ...]
+# Software list: see software.txt in this repo. Usage: ./install.sh [step ...]
 # Steps: base claude vivaldi ghostty bitwarden yubikey herdr  (default: all, in that order)
 set -euo pipefail
 
 log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
 have() { command -v "$1" >/dev/null 2>&1; }
 installed() { dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q '^install ok installed'; }
+
+# git_identity <config-key> <preset-value> <prompt>: set a global git option unless already set.
+# Reads from /dev/tty so it also works when the script itself is piped in; skips if there is no TTY.
+git_identity() {
+    local key=$1 value=$2 prompt=$3
+    git config --global "$key" >/dev/null && return 0
+    if [[ -z $value ]]; then
+        if { : </dev/tty; } 2>/dev/null; then
+            read -r -p "$prompt: " value </dev/tty || true
+        fi
+    fi
+    if [[ -n $value ]]; then
+        git config --global "$key" "$value"
+    else
+        echo "warning: $key not set (no value given). Set it later with: git config --global $key ..." >&2
+    fi
+}
 
 [[ $EUID -ne 0 ]] || { echo "Run as your normal user, not root (sudo is used where needed)." >&2; exit 1; }
 
@@ -23,9 +40,9 @@ step_base() {
     sudo apt-get update
     "${APT[@]}" curl ca-certificates gnupg git
 
-    # Git identity (only if not already set; override with GIT_NAME / GIT_EMAIL).
-    git config --global user.name >/dev/null || git config --global user.name "${GIT_NAME:-Fredrik}"
-    git config --global user.email >/dev/null || git config --global user.email "${GIT_EMAIL:-fredrik.skaring@gmail.com}"
+    # Git identity: only if not already set. Uses GIT_NAME / GIT_EMAIL if given, otherwise asks.
+    git_identity user.name "${GIT_NAME:-}" "Git user.name"
+    git_identity user.email "${GIT_EMAIL:-}" "Git user.email"
 
     # Claude Code and Herdr install into ~/.local/bin.
     local line='export PATH="$HOME/.local/bin:$PATH"'
