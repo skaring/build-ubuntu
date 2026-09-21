@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Unattended setup for a fresh Ubuntu 26.04 desktop. Idempotent: safe to re-run.
 # Software list: see software.txt in this repo. Usage: ./install.sh [step ...]
-# Steps: base claude vivaldi ghostty bitwarden yubikey herdr  (default: all, in that order)
+# Steps: base claude vivaldi ghostty bitwarden yubikey herdr desktop  (default: all, in that order)
 set -euo pipefail
 
 log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
@@ -113,8 +113,16 @@ step_herdr() {
     curl -fsSL https://herdr.dev/install.sh | sh
 }
 
+step_desktop() {
+    # Needs a desktop session and the rest of this repo (desktop.sh), so use a checkout or bootstrap.sh.
+    log "Desktop preferences"
+    local dir; dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    [[ -x $dir/desktop.sh ]] || { echo "desktop.sh not found next to install.sh; run from a git checkout (see bootstrap.sh)." >&2; return 1; }
+    "$dir/desktop.sh"
+}
+
 STEPS=("$@")
-[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base claude vivaldi ghostty bitwarden yubikey herdr)
+[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base claude vivaldi ghostty bitwarden yubikey herdr desktop)
 
 for s in "${STEPS[@]}"; do
     declare -F "step_$s" >/dev/null || { echo "Unknown step: $s" >&2; exit 1; }

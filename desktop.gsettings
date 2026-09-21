@@ -1,0 +1,12 @@
+# GNOME settings applied by desktop.sh via `gsettings set`.
+# Format: <schema> <key> <value in GVariant text form>. Blank lines and # comments are ignored.
+
+# Four fixed workspaces (dynamic workspaces must be off, otherwise the count is ignored).
+org.gnome.mutter dynamic-workspaces false
+org.gnome.desktop.wm.preferences num-workspaces 4
+
+# Green theme (Yaru "olive" is Ubuntu's green), dark.
+org.gnome.desktop.interface accent-color 'green'
+org.gnome.desktop.interface gtk-theme 'Yaru-olive-dark'
+org.gnome.desktop.interface icon-theme 'Yaru-olive-dark'
+org.gnome.desktop.interface color-scheme 'prefer-dark'

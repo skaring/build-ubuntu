@@ -31,6 +31,4 @@ Tick them off as you go; add new ones as they come up.
 ## Undecided
 - [ ] Firefox stays as a backup browser (decided). It is a snap on Ubuntu; revisit only if you want
       it via Mozilla's apt repo instead (avoiding snaps is a stated preference).
-- [ ] Verify Vivaldi is the default after the first run: `xdg-settings get default-web-browser`
-      (expect `vivaldi-stable.desktop`; the script sets it but that is untested).
 - [ ] Bitwarden `.deb` does not self-update: re-run `./install.sh bitwarden` to upgrade.
