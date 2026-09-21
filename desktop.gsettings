@@ -10,3 +10,19 @@ org.gnome.desktop.interface accent-color 'green'
 org.gnome.desktop.interface gtk-theme 'Yaru-olive-dark'
 org.gnome.desktop.interface icon-theme 'Yaru-olive-dark'
 org.gnome.desktop.interface color-scheme 'prefer-dark'
+
+# Jump straight to workspace N with Super+N, move the focused window with Super+Shift+N.
+# Super+1..4 are otherwise "launch Nth dock app" (GNOME Shell), which is useless with the dock off, so free them.
+# (The Ubuntu Dock extension has its own Super+N hotkeys; they are inactive while the extension is disabled.)
+org.gnome.shell.keybindings switch-to-application-1 @as []
+org.gnome.shell.keybindings switch-to-application-2 @as []
+org.gnome.shell.keybindings switch-to-application-3 @as []
+org.gnome.shell.keybindings switch-to-application-4 @as []
+org.gnome.desktop.wm.keybindings switch-to-workspace-1 ['<Super>1', '<Super>Home']
+org.gnome.desktop.wm.keybindings switch-to-workspace-2 ['<Super>2']
+org.gnome.desktop.wm.keybindings switch-to-workspace-3 ['<Super>3']
+org.gnome.desktop.wm.keybindings switch-to-workspace-4 ['<Super>4']
+org.gnome.desktop.wm.keybindings move-to-workspace-1 ['<Super><Shift>1', '<Super><Shift>Home']
+org.gnome.desktop.wm.keybindings move-to-workspace-2 ['<Super><Shift>2']
+org.gnome.desktop.wm.keybindings move-to-workspace-3 ['<Super><Shift>3']
+org.gnome.desktop.wm.keybindings move-to-workspace-4 ['<Super><Shift>4']
