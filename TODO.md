@@ -6,9 +6,6 @@ Tick them off as you go; add new ones as they come up.
 ## Accounts & sign-in
 - [ ] Sign in to Claude Code: run `claude` and log in.
 - [ ] Sign in to Bitwarden desktop (and the Vivaldi extension).
-- [ ] Set git identity: `git config --global user.name "Fredrik"` and
-      `git config --global user.email "fredrik.skaring@gmail.com"`
-      (candidate to move into `install.sh` `base`).
 
 ## SSH & GitHub
 - [ ] Generate a key: `ssh-keygen -t ed25519 -C "fredrik.skaring@gmail.com"`, then add the `.pub`

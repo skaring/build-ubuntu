@@ -23,6 +23,10 @@ step_base() {
     sudo apt-get update
     "${APT[@]}" curl ca-certificates gnupg git
 
+    # Git identity (only if not already set; override with GIT_NAME / GIT_EMAIL).
+    git config --global user.name >/dev/null || git config --global user.name "${GIT_NAME:-Fredrik}"
+    git config --global user.email >/dev/null || git config --global user.email "${GIT_EMAIL:-fredrik.skaring@gmail.com}"
+
     # Claude Code and Herdr install into ~/.local/bin.
     local line='export PATH="$HOME/.local/bin:$PATH"'
     grep -qxF "$line" ~/.bashrc || echo "$line" >> ~/.bashrc
