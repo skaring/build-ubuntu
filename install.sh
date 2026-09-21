@@ -57,6 +57,10 @@ EOF
         sudo apt-get update
     fi
     "${APT[@]}" vivaldi-stable
+
+    # Default browser (Firefox stays installed as a fallback). Needs a desktop session; don't abort without one.
+    xdg-settings set default-web-browser vivaldi-stable.desktop \
+        || echo "warning: could not set Vivaldi as default browser (no desktop session?). See TODO.md" >&2
 }
 
 step_ghostty() {
