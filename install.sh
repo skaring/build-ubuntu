@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Unattended setup for a fresh Ubuntu 26.04 desktop. Idempotent: safe to re-run.
 # Software list: see software.txt in this repo. Usage: ./install.sh [step ...]
-# Steps: base claude vivaldi ghostty bitwarden obsidian yubikey herdr desktop  (default: all, in that order)
+# Steps: base claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr desktop  (default: all, in that order)
 set -euo pipefail
 
 log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
@@ -126,6 +126,13 @@ step_obsidian() {
     install_deb obsidian "${urls[@]}"
 }
 
+step_ksnip() {
+    # Screenshot + annotation (Greenshot-like). Works on GNOME Wayland via the desktop portal; Flameshot did not.
+    # Hotkey (Super+Shift+S) is set by desktop.sh.
+    log "ksnip (Ubuntu archive)"
+    "${APT[@]}" ksnip
+}
+
 step_yubikey() {
     # Tooling only. Deliberately no libpam-u2f: enrolling keys for login/sudo can lock you out,
     # so that stays a manual, deliberate step.
@@ -148,7 +155,7 @@ step_desktop() {
 }
 
 STEPS=("$@")
-[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base claude vivaldi ghostty bitwarden obsidian yubikey herdr desktop)
+[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr desktop)
 
 for s in "${STEPS[@]}"; do
     declare -F "step_$s" >/dev/null || { echo "Unknown step: $s" >&2; exit 1; }

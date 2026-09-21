@@ -5,6 +5,7 @@ Claude Code
 - echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc 
 Bitwarden
 Obsidian
+ksnip (screenshots with annotation)
 Ghostty
 Vivaldi
 YubiKey support (yubikey-manager, fido2-tools, pcscd, scdaemon, Yubico Authenticator)
