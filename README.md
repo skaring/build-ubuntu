@@ -17,7 +17,7 @@ Or from a checkout:
 ./install.sh vivaldi    # just one (or several) steps
 ```
 
-Steps: `base claude vivaldi ghostty bitwarden herdr`. The script is idempotent; re-run it to upgrade
+Steps: `base claude vivaldi ghostty bitwarden yubikey herdr`. The script is idempotent; re-run it to upgrade
 Bitwarden (its `.deb` does not self-update).
 
 ## Notes

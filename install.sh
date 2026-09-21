@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Unattended setup for a fresh Ubuntu 26.04 desktop. Idempotent: safe to re-run.
 # Software list: see ~/software.txt. Usage: ./install.sh [step ...]
-# Steps: base claude vivaldi ghostty bitwarden herdr  (default: all, in that order)
+# Steps: base claude vivaldi ghostty bitwarden yubikey herdr  (default: all, in that order)
 set -euo pipefail
 
 log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
@@ -75,6 +75,13 @@ step_bitwarden() {
     rm -rf "$tmp"
 }
 
+step_yubikey() {
+    # Tooling only. Deliberately no libpam-u2f: enrolling keys for login/sudo can lock you out,
+    # so that stays a manual, deliberate step.
+    log "YubiKey support (ykman, FIDO2 tools, smartcard/GPG, Authenticator)"
+    "${APT[@]}" yubikey-manager fido2-tools pcscd scdaemon yubioath-desktop
+}
+
 step_herdr() {
     log "Herdr"
     if have herdr || [[ -x "$HOME/.local/bin/herdr" ]]; then echo "already installed"; return; fi
@@ -82,7 +89,7 @@ step_herdr() {
 }
 
 STEPS=("$@")
-[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base claude vivaldi ghostty bitwarden herdr)
+[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base claude vivaldi ghostty bitwarden yubikey herdr)
 
 for s in "${STEPS[@]}"; do
     declare -F "step_$s" >/dev/null || { echo "Unknown step: $s" >&2; exit 1; }
