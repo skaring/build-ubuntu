@@ -25,7 +25,7 @@ Bitwarden and Obsidian (their `.deb`s do not self-update).
 ## Desktop preferences
 
 `./install.sh desktop` (or `./desktop.sh`) applies GNOME preferences: 4 fixed workspaces, green (Yaru olive, dark)
-theme, Ghostty as default terminal, Ubuntu Dock disabled, `Super+Shift+S` for ksnip area screenshots, `Super+1..4` to switch workspace and `Super+Shift+1..4` to move a window. Plain GNOME settings are listed in `desktop.gsettings`
+theme, Ghostty as default terminal, Ubuntu Dock disabled, event sounds off, `Super+Shift+S` for ksnip area screenshots, `Super+1..4` to switch workspace and `Super+Shift+1..4` to move a window. Plain GNOME settings are listed in `desktop.gsettings`
 (`<schema> <key> <value>` per line); anything else goes in `desktop.sh`. It needs a running desktop session, so run it
 from a terminal on the desktop, not over SSH. Vivaldi as default browser is set by the `vivaldi` step.
 
