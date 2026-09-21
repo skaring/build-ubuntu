@@ -74,6 +74,17 @@ step_shell() {
     # (history), Ctrl-T (files) and Alt-C (cd), so it replaces bash's default Ctrl-R search.
     log "Shell tools (zoxide, fzf, tmux)"
     "${APT[@]}" zoxide fzf tmux
+
+    # tmux config: mouse support (click to select panes/windows, drag borders to resize, wheel to scroll).
+    local tmux_conf=~/.config/tmux/tmux.conf
+    mkdir -p "$(dirname "$tmux_conf")"
+    if ! grep -qxF '# >>> build-ubuntu: tmux >>>' "$tmux_conf" 2>/dev/null; then
+        cat >> "$tmux_conf" <<'TMUX'
+# >>> build-ubuntu: tmux >>>
+set -g mouse on
+# <<< build-ubuntu: tmux <<<
+TMUX
+    fi
     local marker='# >>> build-ubuntu: zoxide + fzf >>>'
     if ! grep -qxF "$marker" ~/.bashrc; then
         cat >> ~/.bashrc <<'BASHRC'
