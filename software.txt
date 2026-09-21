@@ -11,4 +11,6 @@ Vivaldi
 YubiKey support (yubikey-manager, fido2-tools, pcscd, scdaemon, Yubico Authenticator)
 Herdr
 git
+zoxide
+fzf
 

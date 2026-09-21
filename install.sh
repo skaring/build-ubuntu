@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Unattended setup for a fresh Ubuntu 26.04 desktop. Idempotent: safe to re-run.
 # Software list: see software.txt in this repo. Usage: ./install.sh [step ...]
-# Steps: base claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr desktop  (default: all, in that order)
+# Steps: base shell claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr desktop  (default: all, in that order)
 set -euo pipefail
 
 log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
@@ -67,6 +67,23 @@ step_base() {
     local line='export PATH="$HOME/.local/bin:$PATH"'
     grep -qxF "$line" ~/.bashrc || echo "$line" >> ~/.bashrc
     export PATH="$HOME/.local/bin:$PATH"
+}
+
+step_shell() {
+    # zoxide (smarter cd: `z`) and fzf (fuzzy finder). fzf's shell integration rebinds Ctrl-R
+    # (history), Ctrl-T (files) and Alt-C (cd), so it replaces bash's default Ctrl-R search.
+    log "Shell tools (zoxide, fzf)"
+    "${APT[@]}" zoxide fzf
+    local marker='# >>> build-ubuntu: zoxide + fzf >>>'
+    if ! grep -qxF "$marker" ~/.bashrc; then
+        cat >> ~/.bashrc <<'BASHRC'
+
+# >>> build-ubuntu: zoxide + fzf >>>
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init bash)"
+command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)"
+# <<< build-ubuntu: zoxide + fzf <<<
+BASHRC
+    fi
 }
 
 step_claude() {
@@ -155,7 +172,7 @@ step_desktop() {
 }
 
 STEPS=("$@")
-[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr desktop)
+[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base shell claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr desktop)
 
 for s in "${STEPS[@]}"; do
     declare -F "step_$s" >/dev/null || { echo "Unknown step: $s" >&2; exit 1; }
