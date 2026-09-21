@@ -70,10 +70,10 @@ step_base() {
 }
 
 step_shell() {
-    # zoxide (smarter cd: `z`) and fzf (fuzzy finder). fzf's shell integration rebinds Ctrl-R
+    # zoxide (smarter cd: `z`), fzf (fuzzy finder) and tmux. fzf's shell integration rebinds Ctrl-R
     # (history), Ctrl-T (files) and Alt-C (cd), so it replaces bash's default Ctrl-R search.
-    log "Shell tools (zoxide, fzf)"
-    "${APT[@]}" zoxide fzf
+    log "Shell tools (zoxide, fzf, tmux)"
+    "${APT[@]}" zoxide fzf tmux
     local marker='# >>> build-ubuntu: zoxide + fzf >>>'
     if ! grep -qxF "$marker" ~/.bashrc; then
         cat >> ~/.bashrc <<'BASHRC'

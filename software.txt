@@ -13,4 +13,5 @@ Herdr
 git
 zoxide
 fzf
+tmux
 
