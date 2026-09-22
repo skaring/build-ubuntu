@@ -65,6 +65,27 @@ else
     warn "ksnip is not installed; Super+Shift+S not bound (run ./install.sh ksnip first)."
 fi
 
+# ksnip: copy new captures to clipboard automatically (off by default). Uses Python's configparser
+# (RawConfigParser, key case preserved) rather than a text append: ksnip's config is a Qt QSettings
+# INI file with opaque @ByteArray(...)/@Variant(...) values that a naive append could corrupt.
+if dry; then
+    would "ksnip: enable \"automatically copy new captures to clipboard\""
+elif command -v ksnip >/dev/null 2>&1; then
+    mkdir -p ~/.config/ksnip
+    python3 - ~/.config/ksnip/ksnip.conf <<'PY'
+import configparser, sys
+path = sys.argv[1]
+cp = configparser.RawConfigParser()
+cp.optionxform = str  # ksnip's keys are case-sensitive; don't lowercase them
+cp.read(path)
+if not cp.has_section('Application'):
+    cp.add_section('Application')
+cp.set('Application', 'AutoCopyToClipboardNewCaptures', 'true')
+with open(path, 'w') as f:
+    cp.write(f, space_around_delimiters=False)
+PY
+fi
+
 # No audible bell in terminals. Ptyxis (Ubuntu's stock terminal) has its own setting; skip if it is not installed.
 if gsettings list-schemas | grep -qx 'org.gnome.Ptyxis'; then
     run gsettings set org.gnome.Ptyxis audible-bell false
