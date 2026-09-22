@@ -10,6 +10,7 @@ Ghostty
 Vivaldi
 YubiKey support (yubikey-manager, fido2-tools, pcscd, scdaemon, Yubico Authenticator)
 Herdr
+Zed
 git
 zoxide
 fzf

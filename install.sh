@@ -2,7 +2,7 @@
 # Unattended setup for a fresh Ubuntu 26.04 desktop. Idempotent: safe to re-run.
 # Software list: see software.txt in this repo.
 # Usage: ./install.sh [--dry-run] [step ...]
-# Steps: base shell claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr desktop  (default: all, in that order)
+# Steps: base shell claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr zed desktop  (default: all, in that order)
 # --dry-run (-n): print what would be done and change nothing (no sudo, no downloads, no prompts).
 set -euo pipefail
 
@@ -181,6 +181,13 @@ step_yubikey() {
     run "${APT[@]}" yubikey-manager fido2-tools pcscd scdaemon yubioath-desktop
 }
 
+step_zed() {
+    log "Zed editor"
+    if have zed; then echo "already installed ($(command -v zed))"; return 0; fi
+    if dry; then would "curl -fsSL https://zed.dev/install.sh | sh"; return 0; fi
+    curl -fsSL https://zed.dev/install.sh | sh
+}
+
 step_herdr() {
     log "Herdr"
     if have herdr || [[ -x "$HOME/.local/bin/herdr" ]]; then echo "already installed"; return 0; fi
@@ -205,7 +212,7 @@ for arg in "$@"; do
         *) STEPS+=("$arg") ;;
     esac
 done
-[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base shell claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr desktop)
+[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base shell claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr zed desktop)
 
 # Validate every step name before running anything.
 for s in "${STEPS[@]}"; do

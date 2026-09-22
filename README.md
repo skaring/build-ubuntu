@@ -20,7 +20,7 @@ Or from a checkout:
 
 `bootstrap.sh` installs git, clones this repo to `~/git/build-ubuntu` and runs `install.sh` (arguments are passed on).
 
-Steps: `base shell claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr desktop`. The script is idempotent; re-run it to upgrade
+Steps: `base shell claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr zed desktop`. The script is idempotent; re-run it to upgrade
 Bitwarden and Obsidian (their `.deb`s do not self-update).
 
 ## Dry run
