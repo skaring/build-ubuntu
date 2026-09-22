@@ -56,10 +56,29 @@ theme, Ghostty as default terminal, Ubuntu Dock disabled, event sounds and termi
 (`<schema> <key> <value>` per line); anything else goes in `desktop.sh`. It needs a running desktop session, so run it
 from a terminal on the desktop, not over SSH. Vivaldi as default browser is set by the `vivaldi` step.
 
+## Corporate setup (optional)
+
+`./corporate.sh` installs Microsoft Edge, Intune (Company Portal) and Microsoft Defender for Endpoint,
+for a device that needs company resources. It is entirely separate: not called by `install.sh` or
+`bootstrap.sh`, so a personal machine never gets it unless you run it yourself.
+
+```bash
+./corporate.sh                # both steps: intune, defender
+./corporate.sh intune         # Edge + Company Portal only
+./corporate.sh --dry-run      # preview
+```
+
+- `intune` runs Microsoft's own installer script (Edge is a hard requirement of Company Portal
+  sign-in, so it installs both). After it finishes, open Company Portal and sign in with your work
+  account to enroll.
+- `defender` adds Microsoft's apt repo and installs `mdatp`. Final onboarding needs a package
+  generated for your organization's tenant from its admin portal, which can't be scripted — see
+  `TODO.md`.
+
 ## Notes
 
 - No snaps: everything is installed via apt, an apt-installed `.deb`, or the vendor's install script.
-- `lib.sh` holds the small helpers shared by `install.sh` and `desktop.sh` (including the dry-run plumbing); keep the
-  scripts together in one checkout.
+- `lib.sh` holds the small helpers shared by `install.sh`, `desktop.sh` and `corporate.sh` (including the dry-run
+  plumbing); keep the scripts together in one checkout.
 - `TODO.md` lists the manual steps the script does not (or should not) do.
 - Keep secrets out of this repo; it is meant to be public.

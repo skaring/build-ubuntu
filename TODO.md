@@ -28,6 +28,19 @@ Tick them off as you go; add new ones as they come up.
 - [ ] Register at least one backup YubiKey everywhere a key is enrolled.
 - [ ] Optional: import/generate OpenPGP keys on the key (uses `pcscd` + `scdaemon`).
 
+## Corporate setup (optional, `./corporate.sh` — work devices only)
+Not run by `install.sh`/`bootstrap.sh`. Installs Microsoft Edge, Intune Company Portal and Defender
+for Endpoint. Two things it cannot do for you:
+- [ ] **Enroll in Intune:** open the Company Portal app (or Edge, on first company sign-in) and sign
+      in with your work account.
+- [ ] **Onboard Defender for Endpoint** (tenant-specific, needs your org's admin portal):
+  1. security.microsoft.com → Settings → Endpoints → Device management → Onboarding.
+     OS: **Linux Server**. Method: **Local Script**. Download `WindowsDefenderATPOnboardingPackage.zip`.
+  2. `unzip` it and copy `MicrosoftDefenderATPOnboardingLinuxServer.py` to this machine.
+  3. `sudo python3 MicrosoftDefenderATPOnboardingLinuxServer.py`
+  4. Check it worked: `mdatp health --field healthy` (may take a few minutes to turn `true`;
+     `mdatp health --field org_id` should no longer be blank).
+
 ## Undecided
 - [ ] Firefox stays as a backup browser (decided). It is a snap on Ubuntu; revisit only if you want
       it via Mozilla's apt repo instead (avoiding snaps is a stated preference).

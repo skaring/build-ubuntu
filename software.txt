@@ -15,3 +15,8 @@ zoxide
 fzf
 tmux
 
+Corporate (optional, work devices only — see corporate.sh, not part of install.sh):
+Microsoft Edge
+Microsoft Intune / Company Portal
+Microsoft Defender for Endpoint
+
