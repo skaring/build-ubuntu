@@ -2,7 +2,7 @@
 # Unattended setup for a fresh Ubuntu 26.04 desktop. Idempotent: safe to re-run.
 # Software list: see software.txt in this repo.
 # Usage: ./install.sh [--dry-run] [step ...]
-# Steps: base shell claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr zed desktop  (default: all, in that order)
+# Steps: base shell claude vivaldi ghostty bitwarden obsidian ksnip drawing yubikey herdr zed desktop  (default: all, in that order)
 # --dry-run (-n): print what would be done and change nothing (no sudo, no downloads, no prompts).
 set -euo pipefail
 
@@ -85,8 +85,8 @@ step_base() {
 step_shell() {
     # zoxide (smarter cd: `z`), fzf (fuzzy finder) and tmux. fzf's shell integration rebinds Ctrl-R
     # (history), Ctrl-T (files) and Alt-C (cd), so it replaces bash's default Ctrl-R search.
-    log "Shell tools (zoxide, fzf, tmux)"
-    run "${APT[@]}" zoxide fzf tmux
+    log "Shell tools (zoxide, fzf, tmux, wl-clipboard)"
+    run "${APT[@]}" zoxide fzf tmux wl-clipboard
 
     # tmux config: mouse support (click to select panes/windows, drag borders to resize, wheel to scroll).
     append_once ~/.config/tmux/tmux.conf '# >>> build-ubuntu: tmux >>>' <<'TMUX'
@@ -174,6 +174,12 @@ step_ksnip() {
     run "${APT[@]}" ksnip
 }
 
+step_drawing() {
+    # Lightweight GTK paint/image tool (GNOME's own "Drawing" app, Paint-style basics).
+    log "Drawing (Ubuntu archive)"
+    run "${APT[@]}" drawing
+}
+
 step_yubikey() {
     # Tooling only. Deliberately no libpam-u2f: enrolling keys for login/sudo can lock you out,
     # so that stays a manual, deliberate step.
@@ -212,7 +218,7 @@ for arg in "$@"; do
         *) STEPS+=("$arg") ;;
     esac
 done
-[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base shell claude vivaldi ghostty bitwarden obsidian ksnip yubikey herdr zed desktop)
+[[ ${#STEPS[@]} -gt 0 ]] || STEPS=(base shell claude vivaldi ghostty bitwarden obsidian ksnip drawing yubikey herdr zed desktop)
 
 # Validate every step name before running anything.
 for s in "${STEPS[@]}"; do

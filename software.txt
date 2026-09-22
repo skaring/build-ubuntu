@@ -6,6 +6,7 @@ Claude Code
 Bitwarden
 Obsidian
 ksnip (screenshots with annotation)
+Drawing (lightweight paint/image tool)
 Ghostty
 Vivaldi
 YubiKey support (yubikey-manager, fido2-tools, pcscd, scdaemon, Yubico Authenticator)
@@ -15,6 +16,7 @@ git
 zoxide
 fzf
 tmux
+wl-clipboard
 
 Corporate (optional, work devices only — see corporate.sh, not part of install.sh):
 Microsoft Edge
