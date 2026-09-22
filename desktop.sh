@@ -59,8 +59,11 @@ if gnome-extensions list 2>/dev/null | grep -qx 'ubuntu-dock@ubuntu.com'; then
 fi
 
 # Screenshot with annotation: Super+Shift+S -> ksnip, rectangular area.
+# Forced through XWayland (QT_QPA_PLATFORM=xcb): ksnip's native-Wayland clipboard write is broken
+# on GNOME (capture works, but nothing lands on the clipboard even with "Copy" clicked by hand);
+# this is ksnip's own documented workaround. Capture itself still works fine under XWayland.
 if dry || command -v ksnip >/dev/null 2>&1; then
-    add_custom_keybinding ksnip "Screenshot (ksnip)" "ksnip -r" "<Super><Shift>s"
+    add_custom_keybinding ksnip "Screenshot (ksnip)" "env QT_QPA_PLATFORM=xcb ksnip -r" "<Super><Shift>s"
 else
     warn "ksnip is not installed; Super+Shift+S not bound (run ./install.sh ksnip first)."
 fi
